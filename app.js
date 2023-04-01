@@ -2,11 +2,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const https = require("https");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv").config();
 
 const app = express();
 app.use(express.static("public"));
 
 app.use(bodyParser.urlencoded({extended: true}));
+
+const STEAM_API = process.env.STEAM_API;
+const STEAM_ID = process.env.STEAM_ID;
 
 /**
  * TODO
@@ -68,7 +72,7 @@ app.route("/:buttons")
             })
         })
     }else if(buttonParams === 'ownButton'){
-        https.get('https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=4B777D85F44A4F20F804D67252435291&steamid=76561198068987064&format=json',(resp)=>{
+        https.get(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${STEAM_API}&steamid=${STEAM_ID}&format=json`,(resp)=>{
             console.log(resp.statusCode);
             let resultData = '';
 
