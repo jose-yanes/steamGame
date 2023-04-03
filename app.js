@@ -123,13 +123,8 @@ app.route("/:buttons")
             console.log(err);
             res.send("Sorry :/")
           })
-        
     }
-
-
 })
-
-
 
 
 app.listen(3000,()=>{
