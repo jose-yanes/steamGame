@@ -16,7 +16,7 @@ const STEAM_ID = process.env.STEAM_ID;
  * TODO
  * Validate if data already exist don't save it again
  * 
- * how to do JOINS in mongo
+ * Search how to use VIEWS with mongoose, in order to change the ownGame.aggregate since is taking so much time.
  * 
  * API that gives you images or data about a game?
  */
@@ -47,6 +47,7 @@ app.route("/:buttons")
 .post((req,res)=>{
 
     const buttonParams = req.params.buttons;
+
     if(buttonParams === 'steamButton'){
         https.get('https://api.steampowered.com/ISteamApps/GetAppList/v2/', (resp)=>{
             console.log(resp.statusCode);
@@ -94,10 +95,42 @@ app.route("/:buttons")
 
             })
         })
+    }else if(buttonParams === 'nextGame'){
+
+        const getRandomNum = (max) =>{
+            return Math.floor(Math.random() * max + 1);
+        }
+        const gameNumber = getRandomNum(419);
+        console.log(`gameNumber ${gameNumber}`);
+
+
+        ownGame.aggregate([
+            {
+                $lookup: {
+                    from: 'steamgames',
+                    localField: 'appid',
+                    foreignField: 'appid',
+                    as: 'match'
+                }
+            }
+          ])
+          .then((matchedGames)=>{
+            const nextGame = matchedGames[gameNumber];
+            console.log(nextGame.match[0].name)
+            res.json(nextGame.match[0].name);
+          })
+          .catch((err)=>{
+            console.log(err);
+            res.send("Sorry :/")
+          })
+        
     }
 
 
 })
+
+
+
 
 app.listen(3000,()=>{
     console.log("Server started")

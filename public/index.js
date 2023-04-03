@@ -1,5 +1,7 @@
 const steamButton = document.getElementById("steamData");
 const ownGamesButton = document.getElementById("ownData");
+const nextGameButton = document.getElementById("nextGame");
+const container = document.getElementById("container");
 
 steamButton.addEventListener('click', (e)=>{
     alert("Data is being downloaded, please wait");
@@ -23,6 +25,23 @@ ownGamesButton.addEventListener('click', (e)=>{
             console.log("Data Saved");
             return;
         }
+    })
+    .catch((err)=>{
+        console.log(err);
+    })
+})
+
+nextGameButton.addEventListener('click', (e)=>{
+    fetch('/nextGame',{method:'POST'})
+    .then((response)=>{
+        if(response.ok){
+            return response.json();
+        }
+    }).then((data)=>{
+        const element = document.createElement('h1');
+        element.textContent = data;
+        console.log(data);
+        container.appendChild(element);
     })
     .catch((err)=>{
         console.log(err);
