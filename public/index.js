@@ -2,6 +2,7 @@ const steamButton = document.getElementById("steamData");
 const ownGamesButton = document.getElementById("ownData");
 const nextGameButton = document.getElementById("nextGame");
 const container = document.getElementById("container");
+const containerTitle = document.getElementById("containerTitle");
 
 steamButton.addEventListener('click', (e)=>{
     alert("Data is being downloaded, please wait");
@@ -40,7 +41,7 @@ nextGameButton.addEventListener('click', (e)=>{
     }).then((data)=>{
         // const element = document.createElement('h1');
         // element.textContent = data;
-        console.log(data);
+        containerTitle.textContent = "Next Game"
         container.textContent = data;
     })
     .catch((err)=>{
