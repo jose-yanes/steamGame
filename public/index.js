@@ -38,10 +38,10 @@ nextGameButton.addEventListener('click', (e)=>{
             return response.json();
         }
     }).then((data)=>{
-        const element = document.createElement('h1');
-        element.textContent = data;
+        // const element = document.createElement('h1');
+        // element.textContent = data;
         console.log(data);
-        container.appendChild(element);
+        container.textContent = data;
     })
     .catch((err)=>{
         console.log(err);

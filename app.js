@@ -19,6 +19,8 @@ const STEAM_ID = process.env.STEAM_ID;
  * Search how to use VIEWS with mongoose, in order to change the ownGame.aggregate since is taking so much time.
  * 
  * API that gives you images or data about a game?
+ * 
+ * (optional) create a new table 'completedGames' so it could check if the game selected was already completed and choose a new one.
  */
 
 mongoose.connect("mongodb://localhost:27017/steamGames")
