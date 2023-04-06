@@ -42,6 +42,7 @@ const ownGame = mongoose.model("ownGame",ownGameSchema);
 app.route("/")
 .get((req,res)=>{
     res.sendFile(`${__dirname}/index.html`);
+    res.sendFile
 })
 
 
