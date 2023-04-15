@@ -15,10 +15,14 @@ const STEAM_ID = process.env.STEAM_ID;
 /**
  * TODO
  * Validate if data already exist don't save it again
- * 
- * Search how to use VIEWS with mongoose, in order to change the ownGame.aggregate since is taking so much time.
+ * https://mongoosejs.com/docs/middleware.html#pre  ??
  * 
  * API that gives you images or data about a game?
+ * 
+ * Try to create a different interface if the user is logged or not{
+ *  if the user is not logged, then choose a random game from the entire SteamLibrary.
+ *  if logged, use their own games
+ * }
  * 
  * (optional) create a new table 'completedGames' so it could check if the game selected was already completed and choose a new one.
  */
@@ -100,32 +104,30 @@ app.route("/:buttons")
         })
     }else if(buttonParams === 'nextGame'){
 
-        const getRandomNum = (max) =>{
-            return Math.floor(Math.random() * max + 1);
-        }
-        const gameNumber = getRandomNum(419);
-        console.log(`gameNumber ${gameNumber}`);
 
 
-        ownGame.aggregate([
-            {
-                $lookup: {
-                    from: 'steamgames',
-                    localField: 'appid',
-                    foreignField: 'appid',
-                    as: 'match'
-                }
+        ownGame.find({})
+        .then((ownGameArr) =>{
+
+            const getRandomNum = (max) =>{
+                return Math.floor(Math.random() * max + 1);
             }
-          ])
-          .then((matchedGames)=>{
-            const nextGame = matchedGames[gameNumber];
-            console.log(nextGame.match[0].name)
-            res.json(nextGame.match[0].name);
-          })
-          .catch((err)=>{
+
+            const gameNumber = getRandomNum(ownGameArr.length);
+            console.log(`gameNumber ${gameNumber}`);
+
+            steamGame.findOne({appid:ownGameArr[gameNumber].appid})
+            .then((randomGameName)=>{
+                console.log(randomGameName.name);
+                res.json(randomGameName.name);
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+        })
+        .catch((err)=>{
             console.log(err);
-            res.send("Sorry :/")
-          })
+        })
     }
 })
 
